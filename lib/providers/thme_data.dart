@@ -35,9 +35,21 @@ class Styles {
         titleTextStyle: TextStyle(
           color: isDarkTheme ? Colors.white : Colors.black,
           fontSize: 22,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.normal,
         ),
       ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+        elevation: 12.0,
+        textStyle: const TextStyle(
+          fontFamily: 'Kanit', // Ensure font family stays the same
+          fontSize: 18,
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      )),
       iconTheme:
           IconThemeData(color: isDarkTheme ? Colors.white : Colors.black),
     );

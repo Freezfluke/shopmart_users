@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shopmart_users/consts/validator.dart';
 import 'package:shopmart_users/providers/theme_provider.dart';
 import 'package:shopmart_users/widgets/button.dart';
 import 'package:shopmart_users/widgets/text.dart';
@@ -14,10 +15,6 @@ class UploadImageWidget extends StatefulWidget {
 class UploadImageWidgetState extends State<UploadImageWidget> {
   File? _image;
   final ImagePicker _picker = ImagePicker();
-
-  TextEditingController name = TextEditingController();
-  TextEditingController price = TextEditingController();
-  TextEditingController count = TextEditingController();
 
   Future<void> _pickImage(ImageSource source) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -84,23 +81,6 @@ class UploadImageWidgetState extends State<UploadImageWidget> {
                   ),
                 )),
         ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: name,
-          decoration: const InputDecoration(labelText: "ชื่อเมนู"),
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: price,
-          decoration: const InputDecoration(labelText: "ราคา"),
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: price,
-          decoration: const InputDecoration(labelText: "จำนวน"),
-        ),
-        const SizedBox(height: 40),
-        SizedBox(width: 300, height: 50, child: Button()),
       ],
     );
   }
