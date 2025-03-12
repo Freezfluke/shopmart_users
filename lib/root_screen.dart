@@ -3,7 +3,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:shopmart_users/screens/cart_screen.dart';
 import 'package:shopmart_users/screens/home_screen.dart';
 import 'package:shopmart_users/screens/profile_screen.dart';
-import 'package:shopmart_users/screens/search_screen.dart';
+import 'package:shopmart_users/screens/menu_screen.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -22,8 +22,8 @@ class _RootScreenState extends State<RootScreen> {
     super.initState();
     screen = const [
       HomeScreen(),
-      SearchScreen(),
       CartScreen(),
+      MenuScreen(),
       ProfileScreen(),
     ];
     controller = PageController(initialPage: currentScreen);

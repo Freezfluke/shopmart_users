@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart' show FormFieldValidator;
 class Validators {
   static FormFieldValidator<String> required() {
     return (value) {
-      if (value == null || value.isEmpty) {
+      if (value == null || value.trim().isEmpty) {
         return "กรุณากรอกข้อมูล";
       }
       return null; // Ensure a return statement for valid input
@@ -14,13 +14,13 @@ class Validators {
 
   static FormFieldValidator<String> requiredNumber() {
     return (value) {
-      if (value == null || value.isEmpty) {
+      if (value == null || value.trim().isEmpty) {
         return "กรุณากรอกข้อมูล";
       }
-      if (!RegExp(r'^\d+(\.\d+)?\$').hasMatch(value)) {
+      if (!RegExp(r'^\d+(\.\d+)?$').hasMatch(value)) {
         return 'กรุณากรอกเฉพาะตัวเลข';
       }
-      return null; // Ensure a return statement for valid input
+      return null;
     };
   }
 

@@ -5,14 +5,14 @@ import 'package:shopmart_users/consts/path_name.dart';
 import 'package:shopmart_users/providers/theme_provider.dart';
 import 'package:shopmart_users/widgets/text.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
+class MenuScreen extends StatefulWidget {
+  const MenuScreen({super.key});
 
   @override
-  SearchScreenState createState() => SearchScreenState();
+  MenuScreenState createState() => MenuScreenState();
 }
 
-class SearchScreenState extends State<SearchScreen> {
+class MenuScreenState extends State<MenuScreen> {
   final List<Map<String, dynamic>> items = [
     {
       "id": 1,
@@ -75,7 +75,7 @@ class SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const TextWidget(
-          message: "ประวัติ",
+          message: "เมนูทั้งหมด",
         ),
       ),
       body: Padding(
@@ -107,36 +107,41 @@ Widget _cardFood({
   required VoidCallback onAdd,
   required VoidCallback onRemove,
 }) {
-  return Card(
-    margin: const EdgeInsets.symmetric(vertical: 5),
-    child: Padding(
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _foodImage(item["image"]),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextWidget(
-                  message: item['name'],
-                  style: const TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 5),
-                TextWidget(
-                  message: "ราคา : ${item['price']} บาท",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 5),
-                _statusBadge(item["status"]),
-                _actionButtons(context, item['count'], onAdd, onRemove),
-              ],
+  return GestureDetector(
+    onTap: () => {
+      Navigator.pushNamed(context, PathName.detailMenuScreen, arguments: item)
+    },
+    child: Card(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _foodImage(item["image"]),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextWidget(
+                    message: item['name'],
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                  const SizedBox(height: 5),
+                  TextWidget(
+                    message: "ราคา : ${item['price']} บาท",
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 5),
+                  _statusBadge(item["status"]),
+                  _actionButtons(context, item['count'], onAdd, onRemove),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );

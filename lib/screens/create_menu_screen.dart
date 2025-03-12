@@ -27,11 +27,8 @@ class _CreateMenuScreenState extends State<CreateMenuScreen> {
 
   void onSubmitCreate() {
     if (_formKey.currentState!.validate()) {
-      // Form is valid, proceed with submission
       print("Valid!");
-    } else {
-      // Form is invalid, show errors
-      print("Invalid!");
+      Navigator.of(context).pop();
     }
   }
 
@@ -50,12 +47,14 @@ class _CreateMenuScreenState extends State<CreateMenuScreen> {
           controller: price,
           decoration: const InputDecoration(labelText: "ราคา"),
           validator: Validators.requiredNumber(),
+          keyboardType: TextInputType.number,
         ),
         const SizedBox(height: 20),
         TextFormField(
           controller: count,
           decoration: const InputDecoration(labelText: "จำนวน"),
           validator: Validators.requiredNumber(),
+          keyboardType: TextInputType.number,
         ),
         const SizedBox(height: 40),
         SizedBox(
@@ -71,19 +70,23 @@ class _CreateMenuScreenState extends State<CreateMenuScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const TextWidget(message: "สร้างเมนู"),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: _renderForm(),
-          ),
-        ),
-      ),
-    );
+    return GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+            appBar: AppBar(
+              title: const TextWidget(message: "สร้างเมนู"),
+            ),
+            body: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Form(
+                    key: _formKey,
+                    child: _renderForm(),
+                  ),
+                ),
+              ),
+            )));
   }
 }
