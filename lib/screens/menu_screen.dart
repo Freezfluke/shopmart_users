@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shopmart_users/consts/app_colors.dart';
 import 'package:shopmart_users/consts/path_name.dart';
 import 'package:shopmart_users/providers/theme_provider.dart';
+import 'package:shopmart_users/widgets/buttom_checkout.dart';
 import 'package:shopmart_users/widgets/text.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -97,6 +98,7 @@ class MenuScreenState extends State<MenuScreen> {
         },
         child: const Icon(Icons.add, size: 28),
       ),
+      bottomSheet: const BottomCheckout(),
     );
   }
 }
