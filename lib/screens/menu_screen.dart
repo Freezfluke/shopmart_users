@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopmart_users/consts/app_colors.dart';
 import 'package:shopmart_users/consts/path_name.dart';
+import 'package:shopmart_users/providers/menu_provider.dart';
 import 'package:shopmart_users/providers/theme_provider.dart';
 import 'package:shopmart_users/widgets/buttom_checkout.dart';
 import 'package:shopmart_users/widgets/text.dart';
@@ -61,7 +62,21 @@ class MenuScreenState extends State<MenuScreen> {
     },
   ];
 
-  void _updateCount(int id, int delta) {
+  void _setTotalMenu() {
+    final menuProvider = Provider.of<MenuProvider>(context, listen: false);
+    int sumCount =
+        items.fold<int>(0, (sum, item) => sum + (item["count"] as int));
+    double sumPrice = items.fold<double>(
+        0, (sum, item) => sum + (item["count"] * item["price"]));
+
+    menuProvider.setCount(count: sumCount);
+    menuProvider.setTotalPrice(total: sumPrice);
+  }
+
+  void _updateCount(
+    int id,
+    int delta,
+  ) {
     setState(() {
       final index = items.indexWhere((item) => item['id'] == id);
       if (index != -1) {
@@ -69,10 +84,12 @@ class MenuScreenState extends State<MenuScreen> {
         if (items[index]['count'] < 0) items[index]['count'] = 0;
       }
     });
+    _setTotalMenu();
   }
 
   @override
   Widget build(BuildContext context) {
+    final menuProvider = Provider.of<MenuProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const TextWidget(
@@ -98,7 +115,9 @@ class MenuScreenState extends State<MenuScreen> {
         },
         child: const Icon(Icons.add, size: 28),
       ),
-      bottomSheet: const BottomCheckout(),
+      bottomSheet: menuProvider.count > 0 && menuProvider.totalPrice > 0
+          ? const BottomCheckout()
+          : null,
     );
   }
 }

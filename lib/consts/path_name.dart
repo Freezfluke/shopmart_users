@@ -1,4 +1,5 @@
 class PathName {
   static const createMenuScreen = '/CREATE_MENU_SCREEN';
-  static const detailMenuScreen = 'DETAIL_MENu_SCREEN';
+  static const detailMenuScreen = '/DETAIL_MENU_SCREEN';
+  static const sumOrderScreen = '/SUM_ORDER_SCREEN';
 }

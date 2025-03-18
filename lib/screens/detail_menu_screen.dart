@@ -13,6 +13,10 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
   Map<String, dynamic>? item;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Retrieve the passed argument only once
@@ -22,11 +26,6 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
         item = args;
       }
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override

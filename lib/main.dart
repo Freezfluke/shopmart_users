@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopmart_users/consts/path_name.dart';
+import 'package:shopmart_users/providers/menu_provider.dart';
 import 'package:shopmart_users/providers/theme_provider.dart';
 import 'package:shopmart_users/providers/thme_data.dart';
 import 'package:shopmart_users/root_screen.dart';
 import 'package:shopmart_users/screens/create_menu_screen.dart';
 import 'package:shopmart_users/screens/detail_menu_screen.dart';
+import 'package:shopmart_users/screens/sum_order_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,9 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) {
-            return ThemeProvider();
-          })
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+          ChangeNotifierProvider(create: (_) => MenuProvider()),
         ],
         child:
             Consumer<ThemeProvider>(builder: (context, themeProvider, child) {
@@ -35,7 +36,9 @@ class MyApp extends StatelessWidget {
               PathName.createMenuScreen: (BuildContext context) =>
                   const CreateMenuScreen(),
               PathName.detailMenuScreen: (BuildContext context) =>
-                  const DetailMenuScreen()
+                  const DetailMenuScreen(),
+              PathName.sumOrderScreen: (BuildContext context) =>
+                  const SumOrderScreen()
             },
           );
         }));
