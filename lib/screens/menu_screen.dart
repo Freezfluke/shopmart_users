@@ -97,7 +97,13 @@ class MenuScreenState extends State<MenuScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: menuProvider.count > 0 && menuProvider.totalPrice > 0
+                ? 80
+                : 10),
         child: ListView.builder(
           itemCount: items.length,
           itemBuilder: (context, index) => _cardFood(
