@@ -14,8 +14,8 @@ class TextWidget extends StatelessWidget {
     super.key,
     this.message = "Not text",
   }) : style = const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w300,
+          fontSize: 20,
+          fontWeight: FontWeight.w500,
         );
 
   const TextWidget.headTitle({super.key, this.message = "Not text"})
