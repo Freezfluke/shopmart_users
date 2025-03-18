@@ -33,10 +33,10 @@ class Styles {
         elevation: 0,
         shape: const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
         titleTextStyle: TextStyle(
-          color: isDarkTheme ? Colors.white : Colors.black,
-          fontSize: 22,
-          fontWeight: FontWeight.normal,
-        ),
+            color: isDarkTheme ? Colors.white : Colors.black,
+            fontSize: 22,
+            fontWeight: FontWeight.normal,
+            fontFamily: 'Kanit'),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

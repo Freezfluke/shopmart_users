@@ -78,6 +78,21 @@ class MenuScreenState extends State<MenuScreen> {
     menuProvider.setTotalPrice(total: sumPrice);
   }
 
+  void _setSelectMenu(int id) {
+    final menuProvider = Provider.of<MenuProvider>(context, listen: false);
+
+    final index = items.indexWhere((item) => item['id'] == id);
+
+    menuProvider.setControlItems(
+      id: items[index]['id'],
+      name: items[index]['name'],
+      price: items[index]['price'],
+      image: items[index]['image'],
+      status: items[index]['status'],
+      count: items[index]['count'],
+    );
+  }
+
   void _updateCount(
     int id,
     int delta,
@@ -90,6 +105,7 @@ class MenuScreenState extends State<MenuScreen> {
       }
     });
     _setTotalMenu();
+    _setSelectMenu(id);
   }
 
   Widget build(BuildContext context) {
