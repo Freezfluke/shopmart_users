@@ -15,6 +15,11 @@ class MenuScreen extends StatefulWidget {
 }
 
 class MenuScreenState extends State<MenuScreen> {
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   final List<Map<String, dynamic>> items = [
     {
       "id": 1,
@@ -87,7 +92,6 @@ class MenuScreenState extends State<MenuScreen> {
     _setTotalMenu();
   }
 
-  @override
   Widget build(BuildContext context) {
     final menuProvider = Provider.of<MenuProvider>(context);
     return Scaffold(
