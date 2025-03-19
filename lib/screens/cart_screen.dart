@@ -5,6 +5,7 @@ import 'package:shopmart_users/consts/path_name.dart';
 import 'package:shopmart_users/providers/menu_provider.dart';
 import 'package:shopmart_users/providers/theme_provider.dart';
 import 'package:shopmart_users/providers/thme_data.dart';
+import 'package:shopmart_users/widgets/button.dart';
 import 'package:shopmart_users/widgets/text.dart';
 
 class CartScreen extends StatefulWidget {
@@ -162,16 +163,37 @@ class _CartScreenState extends State<CartScreen> {
             endIndent: 0,
             color: Colors.grey,
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            const TextWidget(
-              style: TextStyle(fontWeight: FontWeight.bold),
-              message: 'ราคาสุทธิ',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const TextWidget(
+                style: TextStyle(fontWeight: FontWeight.bold),
+                message: 'ราคาสุทธิ',
+              ),
+              TextWidget(
+                style: const TextStyle(fontWeight: FontWeight.bold),
+                message: '${menuProvider.totalPrice.toString()} บาท',
+              ),
+            ],
+          ),
+          const Divider(
+            height: 30,
+            thickness: 0.5,
+            indent: 0,
+            endIndent: 0,
+            color: Colors.grey,
+          ),
+          SizedBox(
+            width: double.maxFinite,
+            height: 50,
+            child: Button(
+              onPress: () async {
+                // Navigator.of(context).pop();
+                Navigator.pop(context, (route) => false);
+              },
+              name: 'ยืนยันคำสั่งซื้อ',
             ),
-            TextWidget(
-              style: const TextStyle(fontWeight: FontWeight.bold),
-              message: '${menuProvider.totalPrice.toString()} บาท',
-            )
-          ])
+          ),
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:shopmart_users/screens/cart_screen.dart';
+import 'package:shopmart_users/screens/history_order_screen.dart';
 import 'package:shopmart_users/screens/home_screen.dart';
 import 'package:shopmart_users/screens/profile_screen.dart';
 import 'package:shopmart_users/screens/menu_screen.dart';
@@ -22,7 +23,7 @@ class _RootScreenState extends State<RootScreen> {
     super.initState();
     screen = const [
       HomeScreen(),
-      CartScreen(),
+      HistoryOrderScreen(),
       MenuScreen(),
       ProfileScreen(),
     ];

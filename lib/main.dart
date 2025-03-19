@@ -8,6 +8,7 @@ import 'package:shopmart_users/root_screen.dart';
 import 'package:shopmart_users/screens/cart_screen.dart';
 import 'package:shopmart_users/screens/create_menu_screen.dart';
 import 'package:shopmart_users/screens/detail_menu_screen.dart';
+import 'package:shopmart_users/screens/history_order_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +39,9 @@ class MyApp extends StatelessWidget {
               PathName.detailMenuScreen: (BuildContext context) =>
                   const DetailMenuScreen(),
               PathName.sumOrderScreen: (BuildContext context) =>
-                  const CartScreen()
+                  const CartScreen(),
+              PathName.historyOrderScreen: (BuildContext context) =>
+                  const HistoryOrderScreen(),
             },
           );
         }));
