@@ -9,17 +9,17 @@ class MenuProvider extends ChangeNotifier {
 
   List<Map<String, dynamic>> get items => _items;
 
-  setTotalPrice({required double total}) {
+  void setTotalPrice({required double total}) {
     _totalPrice = total;
     notifyListeners();
   }
 
-  setCount({required int count}) {
+  void setCount({required int count}) {
     _count = count;
     notifyListeners();
   }
 
-  setControlItems({
+  void setControlItems({
     required int id,
     required String name,
     required double price,
@@ -40,7 +40,13 @@ class MenuProvider extends ChangeNotifier {
         'count': count,
       });
     }
+    notifyListeners();
+  }
 
+  void clearItems() {
+    _items.clear();
+    _count = 0;
+    _totalPrice = 0;
     notifyListeners();
   }
 }

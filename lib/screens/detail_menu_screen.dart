@@ -19,7 +19,6 @@ class _DetailMenuScreenState extends State<DetailMenuScreen> {
 
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Retrieve the passed argument only once
     if (item == null) {
       final args = ModalRoute.of(context)?.settings.arguments;
       if (args is Map<String, dynamic>) {

@@ -16,8 +16,59 @@ class MenuScreen extends StatefulWidget {
 
 class MenuScreenState extends State<MenuScreen> {
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final menuProvider = Provider.of<MenuProvider>(context, listen: false);
+        menuProvider.clearItems();
+      }
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final menuProvider = Provider.of<MenuProvider>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const TextWidget(
+          message: "เมนูทั้งหมด",
+        ),
+      ),
+      body: Padding(
+        padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: menuProvider.count > 0 && menuProvider.totalPrice > 0
+                ? 80
+                : 10),
+        child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (context, index) => _cardFood(
+            context: context,
+            item: items[index],
+            onAdd: () => _updateCount(items[index]['id'], 1),
+            onRemove: () => _updateCount(items[index]['id'], -1),
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Increment',
+        onPressed: () {
+          Navigator.pushNamed(context, PathName.createMenuScreen);
+        },
+        child: const Icon(Icons.add, size: 28),
+      ),
+      bottomSheet: menuProvider.count > 0 && menuProvider.totalPrice > 0
+          ? const BottomCheckout()
+          : null,
+    );
   }
 
   final List<Map<String, dynamic>> items = [
@@ -108,195 +159,156 @@ class MenuScreenState extends State<MenuScreen> {
     _setSelectMenu(id);
   }
 
-  Widget build(BuildContext context) {
-    final menuProvider = Provider.of<MenuProvider>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: const TextWidget(
-          message: "เมนูทั้งหมด",
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.only(
-            top: 10,
-            left: 10,
-            right: 10,
-            bottom: menuProvider.count > 0 && menuProvider.totalPrice > 0
-                ? 80
-                : 10),
-        child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (context, index) => _cardFood(
-            context: context,
-            item: items[index],
-            onAdd: () => _updateCount(items[index]['id'], 1),
-            onRemove: () => _updateCount(items[index]['id'], -1),
+  Widget _cardFood({
+    required BuildContext context,
+    required Map<String, dynamic> item,
+    required VoidCallback onAdd,
+    required VoidCallback onRemove,
+  }) {
+    return GestureDetector(
+      onTap: () => {
+        Navigator.pushNamed(context, PathName.detailMenuScreen, arguments: item)
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _foodImage(item["image"]),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextWidget(
+                      message: item['name'],
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 5),
+                    TextWidget(
+                      message: "ราคา : ${item['price']} บาท",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 5),
+                    _statusBadge(item["status"]),
+                    _actionButtons(context, item['count'], onAdd, onRemove),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
-        onPressed: () {
-          Navigator.pushNamed(context, PathName.createMenuScreen);
-        },
-        child: const Icon(Icons.add, size: 28),
-      ),
-      bottomSheet: menuProvider.count > 0 && menuProvider.totalPrice > 0
-          ? const BottomCheckout()
-          : null,
     );
   }
-}
 
-Widget _cardFood({
-  required BuildContext context,
-  required Map<String, dynamic> item,
-  required VoidCallback onAdd,
-  required VoidCallback onRemove,
-}) {
-  return GestureDetector(
-    onTap: () => {
-      Navigator.pushNamed(context, PathName.detailMenuScreen, arguments: item)
-    },
-    child: Card(
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
+  Widget _foodImage(String? imageUrl) {
+    const placeholder =
+        'https://as1.ftcdn.net/jpg/05/03/24/40/1000_F_503244059_fRjgerSXBfOYZqTpei4oqyEpQrhbpOML.jpg';
+    return Container(
+      width: 110,
+      height: 100,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        child: Image.network(
+          imageUrl?.isNotEmpty == true ? imageUrl! : placeholder,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) =>
+              Image.network(placeholder, fit: BoxFit.cover),
+        ),
+      ),
+    );
+  }
+
+  Widget _statusBadge(String? status) {
+    final Map<String, Color> statusColors = {
+      "SUCCESS": const Color(0xFFECFFDC),
+      "WATING": const Color(0xFFFBCEB1),
+      "": const Color(0xFFffbaba),
+    };
+
+    final Map<String, Color> textColors = {
+      "SUCCESS": const Color.fromARGB(245, 52, 100, 4),
+      "WATING": const Color(0xFFFF5F15),
+      "": const Color(0xFFff0000),
+    };
+
+    final String statusText = {
+          "SUCCESS": "ทำรายการเสร็จสิ้น",
+          "WATING": "กำลังดำเนินการ",
+          "": "ติดต่อเจ้าหน้าที่",
+        }[status] ??
+        "Unknown";
+
+    return Container(
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(100)),
+        color: statusColors[status],
+      ),
+      child: Text(
+        statusText,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+          color: textColors[status],
+        ),
+      ),
+    );
+  }
+
+  Widget _actionButtons(
+      BuildContext context, count, VoidCallback onAdd, VoidCallback onRemove) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Container(
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: themeProvider.getIsDarkTheme
+              ? Colors.black
+              : const Color(0xFFeeeeee),
+          borderRadius: const BorderRadius.all(Radius.circular(100)),
+        ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            _foodImage(item["image"]),
+            _actionButton(context, Icons.remove, onRemove),
             const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextWidget(
-                    message: item['name'],
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                  const SizedBox(height: 5),
-                  TextWidget(
-                    message: "ราคา : ${item['price']} บาท",
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 5),
-                  _statusBadge(item["status"]),
-                  _actionButtons(context, item['count'], onAdd, onRemove),
-                ],
-              ),
-            ),
+            TextWidget(message: count.toString()),
+            const SizedBox(width: 10),
+            _actionButton(context, Icons.add, onAdd),
           ],
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
-Widget _foodImage(String? imageUrl) {
-  const placeholder =
-      'https://as1.ftcdn.net/jpg/05/03/24/40/1000_F_503244059_fRjgerSXBfOYZqTpei4oqyEpQrhbpOML.jpg';
-  return Container(
-    width: 110,
-    height: 100,
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(5)),
-    ),
-    child: ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(5)),
-      child: Image.network(
-        imageUrl?.isNotEmpty == true ? imageUrl! : placeholder,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) =>
-            Image.network(placeholder, fit: BoxFit.cover),
+  Widget _actionButton(
+      BuildContext context, IconData icon, VoidCallback onPressed) {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          padding: const EdgeInsets.all(5),
+          backgroundColor: Theme.of(context).cardTheme.color,
+          elevation: 0,
+        ),
+        child: Icon(
+          icon,
+          size: 18,
+        ),
       ),
-    ),
-  );
-}
-
-Widget _statusBadge(String? status) {
-  final Map<String, Color> statusColors = {
-    "SUCCESS": const Color(0xFFECFFDC),
-    "WATING": const Color(0xFFFBCEB1),
-    "": const Color(0xFFffbaba),
-  };
-
-  final Map<String, Color> textColors = {
-    "SUCCESS": const Color.fromARGB(245, 52, 100, 4),
-    "WATING": const Color(0xFFFF5F15),
-    "": const Color(0xFFff0000),
-  };
-
-  final String statusText = {
-        "SUCCESS": "ทำรายการเสร็จสิ้น",
-        "WATING": "กำลังดำเนินการ",
-        "": "ติดต่อเจ้าหน้าที่",
-      }[status] ??
-      "Unknown";
-
-  return Container(
-    padding: const EdgeInsets.all(6),
-    decoration: BoxDecoration(
-      borderRadius: const BorderRadius.all(Radius.circular(100)),
-      color: statusColors[status],
-    ),
-    child: Text(
-      statusText,
-      style: TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 12,
-        color: textColors[status],
-      ),
-    ),
-  );
-}
-
-Widget _actionButtons(
-    BuildContext context, count, VoidCallback onAdd, VoidCallback onRemove) {
-  final themeProvider = Provider.of<ThemeProvider>(context);
-
-  return Align(
-    alignment: Alignment.bottomRight,
-    child: Container(
-      padding: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: themeProvider.getIsDarkTheme
-            ? Colors.black
-            : const Color(0xFFeeeeee),
-        borderRadius: const BorderRadius.all(Radius.circular(100)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _actionButton(context, Icons.remove, onRemove),
-          const SizedBox(width: 10),
-          TextWidget(message: count.toString()),
-          const SizedBox(width: 10),
-          _actionButton(context, Icons.add, onAdd),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget _actionButton(
-    BuildContext context, IconData icon, VoidCallback onPressed) {
-  return SizedBox(
-    width: 40,
-    height: 40,
-    child: ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        padding: const EdgeInsets.all(5),
-        backgroundColor: Theme.of(context).cardTheme.color,
-        elevation: 0,
-      ),
-      child: Icon(
-        icon,
-        size: 18,
-      ),
-    ),
-  );
+    );
+  }
 }
